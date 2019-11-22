@@ -14,10 +14,10 @@ if (isset($_POST['emailMessage'])){
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "INSERT INTO email (emailName, emailSender, emailMessage) VALUES ('";
+    $sql = "INSERT INTO email (emailName, emailSubject, emailMessage) VALUES ('";
     $sql .= $_POST['emailName'];
     $sql .= "','";
-    $sql .= $_POST['emailSender'];
+    $sql .= $_POST['emailSubject'];
     $sql .= "','";
     $sql .= $_POST['emailMessage'];
     $sql .= "')";
@@ -81,13 +81,13 @@ if (isset($_POST['emailMessage'])){
                 <div class="col s3 offset-s2 right-align">
                     <div class="input-field">
                         <input type="text" class="validate" name = "emailName" required/>
-                        <label for = "name">Message Name</label>
+                        <label for = "name">Email Title</label>
                     </div>
                 </div>          
                 <div class="col s3 left-align">
                     <div class="input-field">
-                        <input type="email" class="validate" name="emailSender" required/>
-                        <label for = "email">Sender Address</label>
+                        <input type="email" class="validate" name="emailSubject" required/>
+                        <label for = "emailSubject">Email Subject</label>
                     </div>
                 </div>
                 <div class="col s4 left-align">

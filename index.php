@@ -121,7 +121,7 @@ if (isset($_POST['email'])){
                         $str .= $row["clientName"];
                         $str .= "</div><div class='col s4'>";
                         $str .= $row["clientEmail"];
-                        $str .= "</div><div class='col s4'><label><input type='checkbox' /><span>Red</span></label></div></div></li>";
+                        $str .= "</div><div class='col s4'><label><input type='checkbox' /><span></span></label></div></div></li>";
                         echo $str;
                     }
                 }
@@ -146,7 +146,12 @@ if (isset($_POST['email'])){
                                     while($row = $messageResult->fetch_assoc()) {
                                         $str = "<option value=";
                                         $str .= $count; 
-                                        $str .= ">";
+                                        $str .= "><input id='hiddenCheckBox";
+                                        $str .= $count;
+                                        $str .= "' type='text' hidden='hidden'";
+                                        $str .= " value= '";
+                                        $str .= $row["emailName"];
+                                        $str .= "'/>";
                                         $str .= $row["emailName"];
                                         $str .= "</option>";
                                         echo $str;
@@ -159,7 +164,7 @@ if (isset($_POST['email'])){
                     </div>
                 </div>
                 <div class="col s4 left-align">
-                    <button class="btn waves-effect waves-light" type="submit">Send to Selected</button>
+                    <button id = "send_btn" class="btn waves-effect waves-light" type="button">Send to Selected</button>
                 </div>
     </div>
 </form>
@@ -207,24 +212,14 @@ if (isset($_POST['email'])){
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-                //Modals
-                var modals = document.querySelectorAll('.modal');
-                var modalI = M.Modal.init(modals);
-                //Tabs
-                var tabs = document.querySelectorAll('.tabs');
-                var tabsI = M.Tabs.init(tabs);
                 //Side-Nav
                 var sideNavs = document.querySelectorAll('.sidenav');
                 var sideNavI = M.Sidenav.init(sideNavs);
                 //Select
                 var elems = document.querySelectorAll('select');
                 var instances = M.FormSelect.init(elems);
-                //Date-Picker
-                var elems = document.querySelectorAll('.datepicker');
-                var instances = M.Datepicker.init(elems, {
-                    yearRange: [1900, 2100]
-                });
-                //Buttons
+                //sendBtn
+                var sendBtn = document.getElementById('send_btn');
                 //sideNav
                 var sideNavBtn = document.getElementById('sideNavBtn');
                 if (sideNavBtn !== undefined && sideNavBtn){
@@ -234,38 +229,16 @@ if (isset($_POST['email'])){
                         }
                     }
                 }
-                //modal
-                var piBtn = document.getElementById('profileImageSelectorBtn');
-                if (piBtn !== undefined && piBtn){
-                    piBtn.onclick = function () {
-                        for (var i = 0; i < modalI.length; i++){
-                            if (modalI[i].id == "profileImageSelector"){
-                                modalI[i].open();
+                var boxes = document.querySelectorAll('option');
+                var checked = [];
+                if (sendBtn !== undefined && sendBtn){
+                    sendBtn.onclick = function(){
+                        for (var i = 0; i < boxes.length; i++){
+                            if (boxes[i].checked == true){
+                                checked.push(boxes[i].firstElementChild.value);
+                                console.log(checked[i]);
                             }
                         }
-                    }
-                }
-                //profileImageSelect
-                var piSelected = document.querySelectorAll('.profileImageSelected');
-                for (var i = 0; i < piSelected.length; i++){
-                    var url = piSelected[i].firstElementChild.src
-                    piSelected[i].onclick = (function(url) {return function() {
-                        for (var i = 0; i < modalI.length; i++){
-                            if (modalI[i].id == "profileImageConfirm"){
-                                document.getElementById("profileImageConfirmLink").src = url;
-                                document.getElementById("profileImage").value = url;
-                                modalI[i].open();
-                            }
-                        }
-                    };})(url);
-                }
-                var piAccept = document.getElementById("profileImageSelectorAcceptBtn");
-                if (piAccept){
-                    piAccept.onclick = function() {
-                        document.getElementById("profileImageForm").submit();
-                        for (var i = 0; i < modalI.length; i++){
-                                modalI[i].close();
-                            }
                     }
                 }
                 
